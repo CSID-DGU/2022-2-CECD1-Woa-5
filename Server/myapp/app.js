@@ -9,6 +9,7 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 const sign_up = require('./routes/api/member/sign_up');
+const sign_in = require('./routes/api/member/sign_in');
 
 
 // view engine setup
@@ -47,6 +48,12 @@ app.post('/API/Sign_up', (req, res) => {
 })
 
 // Log in | Sign in(input: email, pw) 
+
+app.post('/API/Sign_in', (req, res) => {
+  console.log("[Call Sign in API]");
+
+  // TODO database 연결해서 email, pw가 database에 담겨있는지 확인하고 있으면 있다고 보내고 없으면 없다고 보내면 된다.
+})
 
 
 
