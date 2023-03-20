@@ -1,0 +1,22 @@
+CREATE database woa default character set UTF8;
+
+Show databases;
+
+use woa;
+
+
+CREATE TABLE member
+(
+     email VARCHAR(50) PRIMARY KEY NOT NULL,
+     pw VARCHAR(20) NOT NULL,
+     phone_number VARCHAR(15) NOT NULL,
+     name VARCHAR(20) NOT NULL
+) ENGINE=INNODB;
+
+DESCRIBE member;
+
+-- test data --
+
+INSERT INTO member VALUES('kimms5617@naver.com', 'qweasd123!', '01012345678', '김민수');
+
+select * from member;
