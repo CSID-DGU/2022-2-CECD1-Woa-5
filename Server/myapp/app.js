@@ -10,7 +10,8 @@ var usersRouter = require('./routes/users');
 var app = express();
 const sign_up = require('./routes/api/member/sign_up');
 const sign_in = require('./routes/api/member/sign_in');
-
+const search_pw = require('./routes/api/member/search_pw');
+const edit_member = require('./routes/api/member/edit_member');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -58,10 +59,46 @@ app.post('/API/Sign_in', (req, res) => {
 
 
 
+// search PW (input: email)
+
+app.post('/API/Search_pw', (req, res) => {
+  console.log("[Call Search pw API]");
+
+  const userEmail = req.body.email; 
+
+  search_pw.search(userEmail, (error, {})=> {
+    if(error){
+      console.log('error');
+      return res.send({error})
+    }
+
+    res.json({status: res.statusCode});
+  })
+})
+
+
 // edit account(input: pw, phone_number, name)
 
+app.post('/API/Edit_member', (req, res) => {
+  console.log("[Call Edit member API]");
 
+  const userEmail = req.body.email; // PK로 가져와야할 거 같다고 생각이 들어서 HTML hidden 식으로 들고오면 될거 같다.
+  const old_pw = req.body.old_pw;
+  const new_pw = req.body.new_pw;
+  const new_pw_check = req.body.new_pw_check;
+  const phone_number = req.body.phone_number;
+  const name = req.body.name;
 
+  edit_member.edit(userEmail, old_pw, new_pw, new_pw_check, phone_number, name, (error, {}) => {
+    if(error){
+      console.log('error');
+      return res.send({error})
+    }
+
+    res.json({status: res.statusCode});
+  })
+
+})
 // session 도입하여 삭제.
 
 
