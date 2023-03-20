@@ -18,5 +18,6 @@ DESCRIBE member;
 -- test data --
 
 INSERT INTO member VALUES('kimms5617@naver.com', 'qweasd123!', '01012345678', '김민수');
+INSERT INTO member VALUES('kimms1234@naver.com', 'qweasd456!', '01012345678', '김민지');
 
 select * from member;
