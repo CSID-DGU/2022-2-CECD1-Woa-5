@@ -87,15 +87,19 @@ app.post('/API/Search_pw', (req, res) => {
 
   const userEmail = req.body.email; 
 
-  search_pw.search(userEmail, (error, {})=> {
-    if(error){
-      console.log('error');
-      return res.send({error})
-    }
-
-    res.json({status: res.statusCode});
+  var con = db.conn();
+  con.query('SELECT pw from member where email = ?', [userEmail], function(error, results, fields){
+    if(error) throw error;
+    if(results.length > 0){
+      // console.log(results.length);
+      res.json({status: res.statusCode, pw: search_pw.search(userEmail)});
+    }else{
+      res.json({status: res.statusCode, pw: null }); // 없음
+    }  
   })
+  con.end();
 })
+
 
 
 
