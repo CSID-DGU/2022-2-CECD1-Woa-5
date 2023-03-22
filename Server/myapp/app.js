@@ -12,6 +12,7 @@ const sign_up = require('./routes/api/member/sign_up');
 const sign_in = require('./routes/api/member/sign_in');
 const search_pw = require('./routes/api/member/search_pw');
 const edit_member = require('./routes/api/member/edit_member');
+const db = require('./database/db_connect');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -56,18 +57,34 @@ app.post('/API/Sign_in', (req, res) => {
   const userEmail = req.body.email;
   const userPw = req.body.pw;
   console.log(' 이제 들어감 ', )
-  if(sign_in.verification(userEmail, userPw) > 0){
-    res.json({status: res.statusCode});
-  }else{
-    console.log('error');
-    res.send({error});
-  }
+  // tmp = sign_in.verification(userEmail, userPw);
+
+  var con = db.conn();
+
+  con.query('select * from member;', function(error, results, fields){
+   if(error) throw error;
+   console.log(results.length);
+   tmp = results.length;
+  //  res.json({status:res.statusCode, number: tmp});
+  })  
+
+  con.end();
+
+  // if(tmp > 0){
+  //   res.json({status: res.statusCode});
+  // }else{
+  //   console.log('error');
+  //   res.send({error});
+  // }
   
   // TODO database 연결해서 email, pw가 database에 담겨있는지 확인하고 있으면 있다고 보내고 없으면 없다고 보내면 된다.
 })
 
 
+app.get('/api', (req,res) => {
+  const con = db.conn();
 
+})
 
 // search PW (input: email)
 
@@ -85,6 +102,7 @@ app.post('/API/Search_pw', (req, res) => {
     res.json({status: res.statusCode});
   })
 })
+
 
 
 // edit account(input: pw, phone_number, name)
