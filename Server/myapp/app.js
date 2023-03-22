@@ -12,6 +12,7 @@ const sign_up = require('./routes/api/member/sign_up');
 const sign_in = require('./routes/api/member/sign_in');
 const search_pw = require('./routes/api/member/search_pw');
 const edit_member = require('./routes/api/member/edit_member');
+const db = require('./database/db_connect');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,13 +40,23 @@ app.post('/API/Sign_up', (req, res) => {
   const userPhone_number = req.body.phone_number;
   const userName = req.body.name;
 
-  
-  if(sign_up.verification(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName)){
-    res.json({status: res.statusCode});
-  }else{
-    console.log('error');
-    return res.send({error});
-  }  
+  var con = db.conn();
+  con.query('SELECT * FROM member where email = ?', [userEmail], function(error, results, fields){
+    if(error) throw error
+    if(results.length > 0){
+      res.json({status: res.statusCode, check : null}); // 이미 존재한다.
+    }
+    if(sign_up.verification(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName)){
+      con.query('insert into member values(?, ?, ?, ?);',[userEmail, userPw, userPhone_number, userName], function(error, results, fields){
+        if(error) throw error;
+        console.log('회원 가입 완료');
+        res.json({status: res.statusCode, check : true});
+      })
+    }else{
+      res.json({status: res.statusCode, check : null});
+    }
+  })
+    
 })
 
 // Log in | Sign in(input: email, pw) 
@@ -53,10 +64,30 @@ app.post('/API/Sign_up', (req, res) => {
 app.post('/API/Sign_in', (req, res) => {
   console.log("[Call Sign in API]");
 
-  // TODO database 연결해서 email, pw가 database에 담겨있는지 확인하고 있으면 있다고 보내고 없으면 없다고 보내면 된다.
+  const userEmail = req.body.email;
+  const userPw = req.body.pw;
+  // tmp = sign_in.verification(userEmail, userPw);
+
+  var con = db.conn();
+  
+  con.query('select * from member where email = ? and pw =?;',[userEmail, userPw], function(error, results, fields){
+    if(error) throw error;
+    else{
+        // console.log(results.length);
+        if(results.length > 0){
+          res.json({status: res.statusCode, check: true});
+        }else{
+          res.json({status: res.statusCode, check: false});
+        }
+        
+    }   
+  })
+
+  con.end();
+   // 있으면 1, 없으면 0
+  
+  // database 연결해서 email, pw가 database에 담겨있는지 확인하고 있으면 있다고 보내고 없으면 없다고 보내면 된다.
 })
-
-
 
 
 // search PW (input: email)
@@ -66,15 +97,20 @@ app.post('/API/Search_pw', (req, res) => {
 
   const userEmail = req.body.email; 
 
-  search_pw.search(userEmail, (error, {})=> {
-    if(error){
-      console.log('error');
-      return res.send({error})
-    }
-
-    res.json({status: res.statusCode});
+  var con = db.conn();
+  con.query('SELECT pw from member where email = ?', [userEmail], function(error, results, fields){
+    if(error) throw error;
+    if(results.length > 0){
+      // console.log(results.length);
+      res.json({status: res.statusCode, pw: search_pw.search(userEmail)});
+    }else{
+      res.json({status: res.statusCode, pw: null }); // 없음
+    }  
   })
+  con.end();
 })
+
+
 
 
 // edit account(input: pw, phone_number, name)
@@ -89,17 +125,30 @@ app.post('/API/Edit_member', (req, res) => {
   const phone_number = req.body.phone_number;
   const name = req.body.name;
 
-  edit_member.edit(userEmail, old_pw, new_pw, new_pw_check, phone_number, name, (error, {}) => {
-    if(error){
-      console.log('error');
-      return res.send({error})
+  var con = db.conn();
+  con.query('SELECT pw from member where email = ?',[userEmail], function(error, results, fields){
+    console.log(results[0].pw);
+    console.log(old_pw);
+    if(old_pw == results[0].pw){
+      if(edit_member.edit(userEmail, old_pw, new_pw, new_pw_check, phone_number, name)){
+        con.query('UPDATE member SET pw = ?, phone_number =?, name=? where email = ?',[new_pw, phone_number, name, userEmail], function(error, results, fields){
+          if(error) throw error;
+          console.log('수정완료')
+          res.json({status: res.statusCode, check: true});
+        })
+      }else{
+        res.json({status: res.statusCode, check: false });
+      }
+    }else{
+      console.log("no");
+      res.json({status: res.statusCode, check: false });
     }
 
-    res.json({status: res.statusCode});
-  })
+})
 
 })
-// session 도입하여 삭제.
+
+// session 도입하여 논의
 
 
 
