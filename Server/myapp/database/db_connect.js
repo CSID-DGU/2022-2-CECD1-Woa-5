@@ -1,5 +1,5 @@
 // database 연결 구조
-const db = require("mysql");
+const db = require("mysql2");
 require("dotenv").config(); // .env 하기 위한 dotenv 라이브러리 
 
 module.exports.conn = function(){
@@ -21,13 +21,13 @@ module.exports.conn = function(){
    
 }
 
-const con = this.conn();
-// con.connect();
+// const con = this.conn();
+// // con.connect();
 
-con.query('SELECT * from member', (error, rows, fields) => {
-  if (error) throw error;
-  console.log('User info is: ', rows); // RowDataPacket 정보 출력
-  console.log('User info is: ', rows[1]); // 배열의 순서에 해당하는 행 보여줌.
-});
+// con.query('SELECT * from member', (error, rows, fields) => {
+//   if (error) throw error;
+//   console.log('User info is: ', rows); // RowDataPacket 정보 출력
+//   console.log('User info is: ', rows[1]); // 배열의 순서에 해당하는 행 보여줌.
+// });
 
-con.end();
+// con.end();

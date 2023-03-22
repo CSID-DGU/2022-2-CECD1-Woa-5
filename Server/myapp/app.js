@@ -44,7 +44,7 @@ app.post('/API/Sign_up', (req, res) => {
     res.json({status: res.statusCode});
   }else{
     console.log('error');
-    return res.send({error});
+    res.send({error});
   }  
 })
 
@@ -53,6 +53,16 @@ app.post('/API/Sign_up', (req, res) => {
 app.post('/API/Sign_in', (req, res) => {
   console.log("[Call Sign in API]");
 
+  const userEmail = req.body.email;
+  const userPw = req.body.pw;
+  console.log(' 이제 들어감 ', )
+  if(sign_in.verification(userEmail, userPw) > 0){
+    res.json({status: res.statusCode});
+  }else{
+    console.log('error');
+    res.send({error});
+  }
+  
   // TODO database 연결해서 email, pw가 database에 담겨있는지 확인하고 있으면 있다고 보내고 없으면 없다고 보내면 된다.
 })
 
@@ -99,7 +109,8 @@ app.post('/API/Edit_member', (req, res) => {
   })
 
 })
-// session 도입하여 삭제.
+
+// session 도입하여 논의
 
 
 
