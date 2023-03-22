@@ -125,14 +125,26 @@ app.post('/API/Edit_member', (req, res) => {
   const phone_number = req.body.phone_number;
   const name = req.body.name;
 
-  edit_member.edit(userEmail, old_pw, new_pw, new_pw_check, phone_number, name, (error, {}) => {
-    if(error){
-      console.log('error');
-      return res.send({error})
+  var con = db.conn();
+  con.query('SELECT pw from member where email = ?',[userEmail], function(error, results, fields){
+    console.log(results[0].pw);
+    console.log(old_pw);
+    if(old_pw == results[0].pw){
+      if(edit_member.edit(userEmail, old_pw, new_pw, new_pw_check, phone_number, name)){
+        con.query('UPDATE member SET pw = ?, phone_number =?, name=? where email = ?',[new_pw, phone_number, name, userEmail], function(error, results, fields){
+          if(error) throw error;
+          console.log('수정완료')
+          res.json({status: res.statusCode, check: true});
+        })
+      }else{
+        res.json({status: res.statusCode, check: false });
+      }
+    }else{
+      console.log("no");
+      res.json({status: res.statusCode, check: false });
     }
 
-    res.json({status: res.statusCode});
-  })
+})
 
 })
 
