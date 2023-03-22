@@ -56,35 +56,29 @@ app.post('/API/Sign_in', (req, res) => {
 
   const userEmail = req.body.email;
   const userPw = req.body.pw;
-  console.log(' 이제 들어감 ', )
   // tmp = sign_in.verification(userEmail, userPw);
 
   var con = db.conn();
-
-  con.query('select * from member;', function(error, results, fields){
-   if(error) throw error;
-   console.log(results.length);
-   tmp = results.length;
-  //  res.json({status:res.statusCode, number: tmp});
-  })  
+  
+  con.query('select * from member where email = ? and pw =?;',[userEmail, userPw], function(error, results, fields){
+    if(error) throw error;
+    else{
+        // console.log(results.length);
+        if(results.length > 0){
+          res.json({status: res.statusCode, check: true});
+        }else{
+          res.json({status: res.statusCode, check: false});
+        }
+        
+    }   
+  })
 
   con.end();
-
-  // if(tmp > 0){
-  //   res.json({status: res.statusCode});
-  // }else{
-  //   console.log('error');
-  //   res.send({error});
-  // }
+   // 있으면 1, 없으면 0
   
-  // TODO database 연결해서 email, pw가 database에 담겨있는지 확인하고 있으면 있다고 보내고 없으면 없다고 보내면 된다.
+  // database 연결해서 email, pw가 database에 담겨있는지 확인하고 있으면 있다고 보내고 없으면 없다고 보내면 된다.
 })
 
-
-app.get('/api', (req,res) => {
-  const con = db.conn();
-
-})
 
 // search PW (input: email)
 
