@@ -40,13 +40,23 @@ app.post('/API/Sign_up', (req, res) => {
   const userPhone_number = req.body.phone_number;
   const userName = req.body.name;
 
-  
-  if(sign_up.verification(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName)){
-    res.json({status: res.statusCode});
-  }else{
-    console.log('error');
-    res.send({error});
-  }  
+  var con = db.conn();
+  con.query('SELECT * FROM member where email = ?', [userEmail], function(error, results, fields){
+    if(error) throw error
+    if(results.length > 0){
+      res.json({status: res.statusCode, check : null}); // 이미 존재한다.
+    }
+    if(sign_up.verification(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName)){
+      con.query('insert into member values(?, ?, ?, ?);',[userEmail, userPw, userPhone_number, userName], function(error, results, fields){
+        if(error) throw error;
+        console.log('회원 가입 완료');
+        res.json({status: res.statusCode, check : true});
+      })
+    }else{
+      res.json({status: res.statusCode, check : null});
+    }
+  })
+    
 })
 
 // Log in | Sign in(input: email, pw) 
