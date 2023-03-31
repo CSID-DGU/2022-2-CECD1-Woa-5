@@ -1,19 +1,51 @@
 // UserProfile.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import Header from './Header';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+//import Header from './Header';
 
 const UserProfile = () => {
   // 기본값을 현재 로그인된 사용자의 정보로 설정해야 합니다.
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [comfirmPassword, setConfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
+  const SERVER_URL = 'http://ec2-43-200-5-132.ap-northeast-2.compute.amazonaws.com:3000';
 
-  const handleUpdateProfile = () => {
-    // 회원정보 수정 로직을 여기에 구현하십시오.
+  const handleUpdateProfile = async() => {
+    try{
+      console.log('새 회원정보 전송');
+      const response = await fetch('${SERVER_URL}/API/Edit_member',{
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          old_pw: password,
+          new_pw: newPassword,
+          new_pw_check: confirmPassword,
+          phone_number: phone,
+          name: name,
+        }),
+      });
+
+      const data = response.json();
+
+      if(data.check){
+        //회원정보 수정 성공
+        console.log('회원정보 수정 성공');
+        Alert.alert('성공', '회원정보가 수정되었습니다.');
+      }else{
+        //회원정보 수정 실패
+        console.log('회원정보 수정 실패');
+        Alert.alert('실패', '회원정보 수정에 실패했습니다. 입력 정보를 다시 확인해주세요.');
+      }
+    }catch(error){
+      console.error('회원정보 수정 도중 오류 발생:', error);
+      Alert.alert('오류', '회원정보 수정 도중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -44,7 +76,7 @@ const UserProfile = () => {
         <TextInput
           style={styles.input}
           placeholder="신규 비밀번호 재입력"
-          value={comfirmPassword}
+          value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry
         />
