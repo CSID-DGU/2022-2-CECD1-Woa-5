@@ -5,11 +5,38 @@ import Header from './Header';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [pw, setPassword] = useState('');
+  const SERVER_URL = 'http://ec2-43-200-5-132.ap-northeast-2.compute.amazonaws.com:3000';
 
-  const handleLogin = () => {
+  const handleLogin = async() => {
     // 로그인 로직을 여기에 구현하십시오.
-  };
+    try{
+      const response = await fetch('${SERVER_URL}/API/Sign_in',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email:email,
+          pw:pw,
+        }),
+      });
+      const data = await response.json();
+
+      if(data.check){
+        //로그인 성공
+        console.log('로그인 성공');
+        //로그인 후 이동할 페이지로 이동하기
+      }else{
+        //로그인 실패
+        console.log('로그인 실패');
+        alert('로그인 실패');
+      }
+    }catch(error){
+      console.error('로그인 도중 오류 발생:',error);
+      alert('로그인 도중 오류 발생');
+    }
+};
 
   return (
     <View style={styles.container}>
@@ -24,7 +51,7 @@ const LoginScreen = ({navigation}) => {
         <TextInput
           style={styles.input}
           placeholder="비밀번호"
-          value={password}
+          value={pw}
           onChangeText={setPassword}
           secureTextEntry
         />
