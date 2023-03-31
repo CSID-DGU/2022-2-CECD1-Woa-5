@@ -98,11 +98,12 @@ app.post('/API/Search_pw', (req, res) => {
   const userEmail = req.body.email; 
 
   var con = db.conn();
-  con.query('SELECT pw from member where email = ?', [userEmail], function(error, results, fields){
+  con.query('SELECT pw, phone_number from member where email = ?', [userEmail], function(error, results, fields){
     if(error) throw error;
     if(results.length > 0){
       // console.log(results.length);
-      res.json({status: res.statusCode, pw: search_pw.search(userEmail)});
+      // console.log(results[0].phone_number);
+      res.json({status: res.statusCode, pw: search_pw.search(userEmail, results[0].phone_number)});
     }else{
       res.json({status: res.statusCode, pw: null }); // 없음
     }  

@@ -6,13 +6,20 @@
 const db = require("../../../database/db_connect");
 // const nodemailer = require('nodemailer');
 
+const config = require('./number.json');
 
 exports.search = function search_pw(userEmail) {
     
     // TODO 요청된 이메일이 데이터베이스 상에 있는지 확인해야한다.
-
-    
+    // issue: 사용자 전화번호,     
     var con = db.conn();
+
+    // 환경 변수
+    const sens_service_id = config.NCP_SENS_ID;
+    const sens_access_key = config.NCP_SENS_ACCESS;
+    const sens_secret_key = config.NCP_SENS_SECRET;
+    const sens_call_number = config.NCP_SENS_NUMBER;
+
 
     // con.query('SELECT pw from member where email = ?', [userEmail], function(error, results, fields){
     //     if(error) throw error;
