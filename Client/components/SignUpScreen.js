@@ -23,7 +23,7 @@ function SignUpScreen() {
         return;
     }
     try {//POST방식
-        const response = await fetch('${SERVER_URL}/API/Sign_up', {
+        const response = await fetch(`${SERVER_URL}/API/Sign_up`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

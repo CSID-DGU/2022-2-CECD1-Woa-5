@@ -9,7 +9,7 @@ const FindPWScreen = () => {
 
   const handleForgotPassword = async () => {
     try{
-      const response = await fetch('${SERVER_URL}/API/Search_pw',{
+      const response = await fetch(`${SERVER_URL}/API/Search_pw`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

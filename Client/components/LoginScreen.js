@@ -11,7 +11,7 @@ const LoginScreen = ({navigation}) => {
   const handleLogin = async() => {
     // 로그인 로직을 여기에 구현하십시오.
     try{
-      const response = await fetch('${SERVER_URL}/API/Sign_in',{
+      const response = await fetch(`${SERVER_URL}/API/Sign_in`,{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -20,7 +20,7 @@ const UserProfile = () => {
     }
     try{
       console.log('새 회원정보 전송');
-      const response = await fetch('${SERVER_URL}/API/Edit_member',{
+      const response = await fetch(`${SERVER_URL}/API/Edit_member`,{
         method: 'POST',
         headers:{
           'Content-Type': 'application/json'
