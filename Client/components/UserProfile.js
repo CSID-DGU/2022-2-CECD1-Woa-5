@@ -6,10 +6,10 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 const UserProfile = () => {
   // 기본값을 현재 로그인된 사용자의 정보로 설정해야 합니다.
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [phone, setPhone] = useState('');
+  const [old_pw, setOldPassword] = useState('');
+  const [new_pw, setNewPassword] = useState('');
+  const [new_pw_check, setConfirmPassword] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
   const [name, setName] = useState('');
   const SERVER_URL = 'http://ec2-43-200-5-132.ap-northeast-2.compute.amazonaws.com:3000';
 
@@ -23,10 +23,10 @@ const UserProfile = () => {
         },
         body: JSON.stringify({
           email: email,
-          old_pw: password,
-          new_pw: newPassword,
-          new_pw_check: confirmPassword,
-          phone_number: phone,
+          old_pw: old_pw,
+          new_pw: new_pw,
+          new_pw_check: new_pw_check,
+          phone_number: phone_number,
           name: name,
         }),
       });
@@ -62,29 +62,29 @@ const UserProfile = () => {
         <TextInput
           style={styles.input}
           placeholder="기존 비밀번호 입력"
-          value={password}
-          onChangeText={setPassword}
+          value={old_pw}
+          onChangeText={setOldPassword}
           secureTextEntry
         />
         <TextInput
           style={styles.input}
           placeholder="신규 비밀번호 입력"
-          value={newPassword}
+          value={new_pw}
           onChangeText={setNewPassword}
           secureTextEntry
         />
         <TextInput
           style={styles.input}
           placeholder="신규 비밀번호 재입력"
-          value={confirmPassword}
+          value={new_pw_check}
           onChangeText={setConfirmPassword}
           secureTextEntry
         />
         <TextInput
           style={styles.input}
           placeholder="전화번호"
-          value={phone}
-          onChangeText={setPhone}
+          value={phone_number}
+          onChangeText={setPhoneNumber}
         />
         <TextInput
           style={styles.input}
