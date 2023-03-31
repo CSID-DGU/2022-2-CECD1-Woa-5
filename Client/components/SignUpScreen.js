@@ -1,59 +1,67 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import Header from './Header';
 
 function SignUpScreen() {
   const [email, setEmail] = useState('');
-  const [emailCheck, setEmailCheck] = useState('');
   const [pw, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [confirmPhoneNumber, setConfirmPhoneNumber] = useState('');
+  const [pwCheck, setConfirmPassword] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
+  const [phone_numberCheck, setConfirmPhoneNumber] = useState('');
   const [name, setName] = useState('');
+  const SERVER_URL = 'http://ec2-43-200-5-132.ap-northeast-2.compute.amazonaws.com:3000';
 
   // 회원가입 로직을 처리하는 함수
   const handleSignUp = async() => {
-    if (!email || !pw || !confirmPassword || !phoneNumber || !confirmPhoneNumber || !name) {
+    if (!email || !pw || !pwCheck || !phone_number || !phone_numberCheck || !name) {
         alert('모든 필드를 입력해주세요.');
         return;
     }
-    if (pw !== confirmPassword) {
+    if (pw !== pwCheck) {
         alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
         return;
     }
     try {//POST방식
-        const response = await fetch('/API/Sign_up', {
+        const response = await fetch('${SERVER_URL}/API/Sign_up', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
             email,
-            emailCheck,
             pw,
-            confirmPassword,
-            phoneNumber,
-            confirmPhoneNumber,
+            pwCheck,
+            phone_number,
+            phone_numberCheck,
             name,
         }),
-    });
-    const data = await response.json();
+        });
 
-    // 서버 응답에 따른 처리
-    if (response.ok) {
-      alert('회원가입이 완료되었습니다.');
-    } else {
-      alert(`회원가입 실패: ${data.message}`);
+        const data = await response.json();
+        if(data.check === true){
+          Alert.alert('성공', '회원가입이 완료되었습니다');
+        }else{
+          Alert.alert('실패', '회원가입에 실패했습니다. 입력한 정보를 다시 확인하세요.');
+        }
+    }catch(error){
+      Alert.alert('에러', '회원가입 과정에서 문제가 발생했습니다.');
     }
-    } catch (error) {
-        console.error(error);
-        alert('회원가입 중 에러가 발생했습니다.');
-    }
+
+    // // 서버 응답에 따른 처리
+    // if (response.ok) {
+    //   alert('회원가입이 완료되었습니다.');
+    // } else {
+    //   alert(`회원가입 실패: ${data.message}`);
+    // }
+    // } catch (error) {
+    //     console.error(error);
+    //     alert('회원가입 중 에러가 발생했습니다.');
+    // }
   };
 
   const handleSendAuthCode = () =>{
-    alert('인증번호를 보냅니다.');
+    Alert.alert('인증번호를 보냅니다.');
   }
 
   return (
@@ -86,7 +94,7 @@ function SignUpScreen() {
         placeholder="비밀번호 재입력"
         leftIcon={{ type: 'material', name: 'lock' }}
         onChangeText={setConfirmPassword}
-        value={confirmPassword}
+        value={pwCheck}
         secureTextEntry
       />
       <Text>전화번호</Text>
@@ -94,7 +102,7 @@ function SignUpScreen() {
         placeholder="010-xxxx-xxxx"
         leftIcon={{ type: 'material', name: 'phone' }}
         onChangeText={setPhoneNumber}
-        value={phoneNumber}
+        value={phone_number}
         keyboardType="phone-pad"
       />
       <TouchableOpacity onPress={handleSendAuthCode} style={styles.verifyButton}>
@@ -106,7 +114,7 @@ function SignUpScreen() {
         placeholder="인증번호 입력"
         leftIcon={{type: 'material', name: 'phone'}}
         onChangeText={setConfirmPhoneNumber}
-        value={confirmPhoneNumber}
+        value={phone_numberCheck}
       />
       <Text>이름</Text>
       <Input
@@ -123,10 +131,6 @@ function SignUpScreen() {
     </View>
   );
 }
-
-// SignUpScreen.navigationOptions={
-//     title: '회원가입',
-// };
 
 const styles = StyleSheet.create({
     container:{
