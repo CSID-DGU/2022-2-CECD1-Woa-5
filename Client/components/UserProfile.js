@@ -14,6 +14,10 @@ const UserProfile = () => {
   const SERVER_URL = 'http://ec2-43-200-5-132.ap-northeast-2.compute.amazonaws.com:3000';
 
   const handleUpdateProfile = async() => {
+    if (!email || !old_pw || !new_pw || !new_pw_check || !phone_number || !name) {
+      alert('모든 필드를 입력해주세요.');
+      return;
+    }
     try{
       console.log('새 회원정보 전송');
       const response = await fetch('${SERVER_URL}/API/Edit_member',{
