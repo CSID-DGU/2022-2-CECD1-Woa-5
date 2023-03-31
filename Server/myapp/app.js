@@ -27,6 +27,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+// CORS 헤더 추가
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
+// 이후 라우팅 및 미들웨어 코드
 
 // Sign Up (input: email, email(check), pw, pw(check), phone_number, name)
 
@@ -98,11 +106,12 @@ app.post('/API/Search_pw', (req, res) => {
   const userEmail = req.body.email; 
 
   var con = db.conn();
-  con.query('SELECT pw from member where email = ?', [userEmail], function(error, results, fields){
+  con.query('SELECT pw, phone_number from member where email = ?', [userEmail], function(error, results, fields){
     if(error) throw error;
     if(results.length > 0){
       // console.log(results.length);
-      res.json({status: res.statusCode, pw: search_pw.search(userEmail)});
+      // console.log(results[0].phone_number);
+      res.json({status: res.statusCode, pw: search_pw.search(userEmail, results[0].phone_number)});
     }else{
       res.json({status: res.statusCode, pw: null }); // 없음
     }  
