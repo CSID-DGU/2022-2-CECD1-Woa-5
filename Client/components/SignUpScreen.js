@@ -8,12 +8,13 @@ function SignUpScreen() {
   const [emailCheck, setEmailCheck] = useState('');
   const [pw, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [phone_number, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [confirmPhoneNumber, setConfirmPhoneNumber] = useState('');
   const [name, setName] = useState('');
 
   // 회원가입 로직을 처리하는 함수
   const handleSignUp = async() => {
-    if (!email || !pw || !confirmPassword || !phone_number || !name) {
+    if (!email || !pw || !confirmPassword || !phoneNumber || !confirmPhoneNumber || !name) {
         alert('모든 필드를 입력해주세요.');
         return;
     }
@@ -31,7 +32,9 @@ function SignUpScreen() {
             email,
             emailCheck,
             pw,
-            phone_number,
+            confirmPassword,
+            phoneNumber,
+            confirmPhoneNumber,
             name,
         }),
     });
@@ -47,8 +50,11 @@ function SignUpScreen() {
         console.error(error);
         alert('회원가입 중 에러가 발생했습니다.');
     }
-};
+  };
 
+  const handleSendAuthCode = () =>{
+    alert('인증번호를 보냅니다.');
+  }
 
   return (
     <View style={styles.container}>
@@ -65,10 +71,7 @@ function SignUpScreen() {
             autoCapitalize="none"
             keyboardType="email-address"
         />
-        <TouchableOpacity onPress={handleSendAuthCode} style={styles.verifyButton}>
-          <Text style={styles.verifyButtonText}>인증</Text>
-        </TouchableOpacity>
-      </View>     
+      </View>
       
       <Text>비밀번호</Text>
       <Input
@@ -91,19 +94,20 @@ function SignUpScreen() {
         placeholder="010-xxxx-xxxx"
         leftIcon={{ type: 'material', name: 'phone' }}
         onChangeText={setPhoneNumber}
-        value={phone_number}
+        value={phoneNumber}
         keyboardType="phone-pad"
       />
+      <TouchableOpacity onPress={handleSendAuthCode} style={styles.verifyButton}>
+          <Text style={styles.verifyButtonText}>인증</Text>
+      </TouchableOpacity>
+
       <Text>인증번호</Text>
       <Input
         placeholder="인증번호 입력"
-        leftIcon={{type: 'material', name: 'email'}}
-        onChangeText={setEmailCheck}
-        value={emailCheck}
-      >
-      </Input>
-
-
+        leftIcon={{type: 'material', name: 'phone'}}
+        onChangeText={setConfirmPhoneNumber}
+        value={confirmPhoneNumber}
+      />
       <Text>이름</Text>
       <Input
         placeholder="이름"
