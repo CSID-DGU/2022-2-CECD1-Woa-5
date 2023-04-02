@@ -27,14 +27,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-// CORS 헤더 추가
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
-
-// 이후 라우팅 및 미들웨어 코드
+const cors = require('cors');
+app.use(cors({
+  origin: "http://localhost:19006",
+  credentials: true,
+}));
 
 // Sign Up (input: email, email(check), pw, pw(check), phone_number, name)
 
