@@ -154,6 +154,26 @@ app.post('/API/Edit_member', (req, res) => {
 
 })
 
+app.post('/API/Get_number', (req, res) => {
+  console.log("[Call Get number API]");
+
+  const userEmail = req.body.email; // PK
+
+  var con = db.conn();
+
+  con.query('SELECT opponent_number from member where email = ?', [userEmail], function(error, results, fields){
+    if(error) throw error;
+    if(results.length > 0){ // 해당하는 값 존재여부
+      // console.log(results.length);
+      // console.log(results[0].phone_number);
+      res.json({status: res.statusCode, number: results[0].opponent_number});
+    }else{
+      res.json({status: res.statusCode, number: null }); // 없음
+    }  
+  })
+
+})
+
 // session 도입하여 논의
 
 
