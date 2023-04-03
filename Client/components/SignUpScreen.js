@@ -47,17 +47,6 @@ function SignUpScreen() {
     }catch(error){
       Alert.alert('에러', '회원가입 과정에서 문제가 발생했습니다.');
     }
-
-    // // 서버 응답에 따른 처리
-    // if (response.ok) {
-    //   alert('회원가입이 완료되었습니다.');
-    // } else {
-    //   alert(`회원가입 실패: ${data.message}`);
-    // }
-    // } catch (error) {
-    //     console.error(error);
-    //     alert('회원가입 중 에러가 발생했습니다.');
-    // }
   };
 
   const handleSendAuthCode = () =>{
@@ -99,7 +88,7 @@ function SignUpScreen() {
       />
       <Text>전화번호</Text>
       <Input
-        placeholder="010-xxxx-xxxx"
+        placeholder="ex)01012341234"
         leftIcon={{ type: 'material', name: 'phone' }}
         onChangeText={setPhoneNumber}
         value={phone_number}
