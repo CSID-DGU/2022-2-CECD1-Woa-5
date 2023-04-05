@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { Input, Button } from 'react-native-elements';
-import Header from './Header';
 
 function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [pw, setPassword] = useState('');
   const [pwCheck, setConfirmPassword] = useState('');
   const [phone_number, setPhoneNumber] = useState('');
-  const [phone_numberCheck, setConfirmPhoneNumber] = useState('');
+  // const [phone_numberCheck, setConfirmPhoneNumber] = useState('');
+  const [emailCheck, setConfirmEmailCheck] = useState('');
   const [name, setName] = useState('');
   const SERVER_URL = 'http://ec2-43-200-5-132.ap-northeast-2.compute.amazonaws.com:3000';
 
@@ -21,7 +21,7 @@ function SignUpScreen() {
 
   // 회원가입 로직을 처리하는 함수
   const handleSignUp = async() => {
-    if (!email || !pw || !pwCheck || !phone_number || !phone_numberCheck || !name) {
+    if (!email || !pw || !pwCheck || !phone_number || !emailCheck || !name) {
         alert('모든 필드를 입력해주세요.');
         return;
     }
@@ -41,17 +41,20 @@ function SignUpScreen() {
         },
         body: JSON.stringify({
             email,
+            emailCheck,
             pw,
             pwCheck,
             phone_number,
-            phone_numberCheck,
+            // phone_numberCheck,
             name,
         }),
         });
-
         const data = await response.json();
+        console.log(data);
+
         if(data.check === true){
-          Alert.alert('성공', '회원가입이 완료되었습니다');
+          console.log('회원가입 성공');
+          alert('성공', '회원가입이 완료되었습니다');
         }else{
           Alert.alert('실패', '회원가입에 실패했습니다. 입력한 정보를 다시 확인하세요.');
         }
@@ -81,6 +84,14 @@ function SignUpScreen() {
         />
       </View>
       
+      <Text>이메일 확인</Text>
+      <Input
+        placeholder="이메일 재입력"
+        leftIcon={{type: 'material', name: 'email'}}
+        onChangeText={setConfirmEmailCheck}
+        value={emailCheck}
+      />
+      
       <Text>비밀번호</Text>
       <Input
         placeholder="비밀번호 입력"
@@ -99,7 +110,7 @@ function SignUpScreen() {
       />
       <Text>전화번호</Text>
       <Input
-        placeholder="ex)01012341234"
+        placeholder="ex)01027642764"
         leftIcon={{ type: 'material', name: 'phone' }}
         onChangeText={setPhoneNumber}
         value={phone_number}
@@ -109,13 +120,6 @@ function SignUpScreen() {
           <Text style={styles.verifyButtonText}>인증</Text>
       </TouchableOpacity>
 
-      <Text>인증번호</Text>
-      <Input
-        placeholder="인증번호 입력"
-        leftIcon={{type: 'material', name: 'phone'}}
-        onChangeText={setConfirmPhoneNumber}
-        value={phone_numberCheck}
-      />
       <Text>이름</Text>
       <Input
         placeholder="이름"
