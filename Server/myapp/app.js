@@ -174,8 +174,13 @@ app.post('/API/Get_number', (req, res) => {
 
 })
 
+const send_message = require('../myapp/routes/api/member/test');
 // session 도입하여 논의
-
+app.post('/sms/:phone', (req, res) => {
+  const paramObj = req.body.phone;
+  send_message(paramObj);
+  res.send("complete!");
+});
 
 
 // catch 404 and forward to error handler
