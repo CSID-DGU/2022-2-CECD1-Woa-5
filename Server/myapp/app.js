@@ -27,14 +27,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-// CORS 헤더 추가
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  next();
-});
-
-// 이후 라우팅 및 미들웨어 코드
+const cors = require('cors');
+app.use(cors({
+  origin: "http://localhost:19006",
+  credentials: true,
+}));
 
 // Sign Up (input: email, email(check), pw, pw(check), phone_number, name)
 
@@ -157,8 +154,33 @@ app.post('/API/Edit_member', (req, res) => {
 
 })
 
-// session 도입하여 논의
+app.post('/API/Get_number', (req, res) => {
+  console.log("[Call Get number API]");
 
+  const userEmail = req.body.email; // PK
+
+  var con = db.conn();
+
+  con.query('SELECT opponent_number from member where email = ?', [userEmail], function(error, results, fields){
+    if(error) throw error;
+    if(results.length > 0){ // 해당하는 값 존재여부
+      // console.log(results.length);
+      // console.log(results[0].phone_number);
+      res.json({status: res.statusCode, number: results[0].opponent_number});
+    }else{
+      res.json({status: res.statusCode, number: null }); // 없음
+    }  
+  })
+
+})
+
+const send_message = require('../myapp/routes/api/member/test');
+// session 도입하여 논의
+app.post('/sms/:phone', (req, res) => {
+  const paramObj = req.body.phone;
+  send_message(paramObj);
+  res.send("complete!");
+});
 
 
 // catch 404 and forward to error handler

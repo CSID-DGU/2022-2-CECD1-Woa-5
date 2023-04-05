@@ -7,12 +7,9 @@ const db = require("../../../database/db_connect");
 // const nodemailer = require('nodemailer');
 
 const config = require('./number.json');
-const CryptoJS = require("crypto-js");
-const axios = require("axios");
-
+const request = require('request')
+const CryptoJS = require('crypto-js');
 exports.search = function search_pw(userEmail, phone_number) {
-    
-    try{
         
     // TODO 요청된 이메일이 데이터베이스 상에 있는지 확인해야한다.
     // issue: 사용자 전화번호,     
@@ -27,60 +24,56 @@ exports.search = function search_pw(userEmail, phone_number) {
     }
     
 
-
-    const user_phone_number = phone_number;
-    const date = Date.now().toString(); // 날짜 string
-
-    // 환경 변수
-    const sens_service_id = config.NCP_SENS_ID;
-    const sens_access_key = config.NCP_SENS_ACCESS;
-    const sens_secret_key = config.NCP_SENS_SECRET;
-    const sens_call_number = config.NCP_SENS_NUMBER;
-
-    // url 관련 변수 선언
+    var user_phone_number = phone_number;//수신 전화번호 기입
+    var resultCode = 404;
+    const date = Date.now().toString();
+    const uri = config.NCP_SENS_ID; //서비스 ID
+    const secretKey = config.NCP_SENS_SECRET;// Secret Key
+    const accessKey = config.NCP_SENS_ACCESS;//Access Key
+    const call_number = config.NCP_SENS_NUMBER; // call number
     const method = "POST";
     const space = " ";
     const newLine = "\n";
-    const url = 'https://sens.apigw.ntruss.com/sms/v2/services/${sens_service_id}/messages';
-    const url2 = '/sms/v2/services/${sens_service_id}/messages';
-
-    // signature 작성 : cypto-js 모듈을 이용하여 암호화
-    console.log(1);
-    const hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, sens_secret_key);
-    console.log(2);
+    const url = `https://sens.apigw.ntruss.com/sms/v2/services/${uri}/messages`;
+    const url2 = `/sms/v2/services/${uri}/messages`;
+    const hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, secretKey);
     hmac.update(method);
     hmac.update(space);
     hmac.update(url2);
     hmac.update(newLine);
     hmac.update(date);
     hmac.update(newLine);
-    console.log(sens_access_key);
-    hmac.update(sens_access_key);
+    hmac.update(accessKey);
     const hash = hmac.finalize();
-    console.log(4);
     const signature = hash.toString(CryptoJS.enc.Base64);
-    console.log(5);
+    request({
+      method: method,
+      json: true,
+      uri: url,
+      headers: {
+        "Contenc-type": "application/json; charset=utf-8",
+        "x-ncp-iam-access-key": accessKey,
+        "x-ncp-apigw-timestamp": date,
+        "x-ncp-apigw-signature-v2": signature,
+      },
+      body: {
+        type: "SMS",
+        countryCode: "82",
+        from: call_number,
+        content: `임시 비밀번호는 [${text}] 입니다.`,
+        messages: [
+          { to: `${user_phone_number}`, },],
+      },
+    },
+      function (err, res, html) {
+        if (err) console.log(err);
+        else { resultCode = 200; console.log(html); }
+      }
+    );
 
-    // sens 서버로 요청 전송
-    const smsRes = axios({
-        method: method,
-        url: url,
-        headers: {
-            "Contenc-type": "application/json; charset=utf-8",
-            "x-ncp-iam-access-key": sens_access_key,
-            "x-ncp-apigw-timestamp": date,
-            "x-ncp-apigw-signature-v2":signature,
-        },
-        date: {
-            type: "SMS",
-            countryCode: "82",
-            from: sens_call_number,
-            content: '임시비밀번호는 [${text}] 입니다.',
-            messages: [{ to: '${user_phone_number'}],
-        },
-    });
-    console.log("response", smsRes.data);
 
+    
+    
     con.query('update member set pw =? where email = ?;',[text, userEmail], function(error, results, fields){
         if(error) throw error;
         console.log('수정 완료');
@@ -88,12 +81,11 @@ exports.search = function search_pw(userEmail, phone_number) {
     
 
     con.end();
-    return text;
+    
+    // return resultCode;
+    return true;
+    // return text;
 
-    }catch(err){
-        console.log(err);
-        return "SMS not sent";
-    }
     // TODO 임시비밀번호인 text를 데이터베이스 상에 있는 비밀번호와 바꾸기 -> 나중에 회원정보 수정으로 바꾸는 것을 권장.
     // 한가지 생각이 임시비밀번호 데이터베이스 열을 만들어 로그인 시 임시비밀번호와 회원가입시 입력된 비밀번호 둘 다 확인하고 로그인 시키는 것도 좋을거 같다. (이건 금요일에 회의 통해 결정.)
 

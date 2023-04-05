@@ -21,3 +21,7 @@ INSERT INTO member VALUES('kimms5617@naver.com', 'qweasd123!', '01012345678', '�
 INSERT INTO member VALUES('kimms1234@naver.com', 'qweasd456!', '01012345678', '김민지');
 
 select * from member;
+
+
+-- 사용자 - 관리자, 관리자 - 사용자 전화번호 추가 -- 
+alter table member add opponent_number varchar(15) not null default '-'; 
