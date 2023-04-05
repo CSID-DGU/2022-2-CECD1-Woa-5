@@ -12,6 +12,13 @@ function SignUpScreen() {
   const [name, setName] = useState('');
   const SERVER_URL = 'http://ec2-43-200-5-132.ap-northeast-2.compute.amazonaws.com:3000';
 
+  //전화번호 유효성 검사
+  const validatePhoneNumber = (phone_number) =>{
+    //01012345678과 같이 11자리의 전화번호만 인정
+    const phoneNumberFormat = /^0\d{10}$/;
+    return phoneNumberFormat.test(phone_number);
+  }
+
   // 회원가입 로직을 처리하는 함수
   const handleSignUp = async() => {
     if (!email || !pw || !pwCheck || !phone_number || !phone_numberCheck || !name) {
@@ -21,6 +28,10 @@ function SignUpScreen() {
     if (pw !== pwCheck) {
         alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
         return;
+    }
+    if(!(validatePhoneNumber(phone_number))){
+      alert('전화번호 형식이 일치하지 않습니다.');
+      return;
     }
     try {//POST방식
         const response = await fetch(`${SERVER_URL}/API/Sign_up`, {
