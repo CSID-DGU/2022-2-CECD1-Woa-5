@@ -1,7 +1,5 @@
-// FindPWScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import Header from './Header';
 
 const FindPWScreen = () => {
   const [email, setEmail] = useState('');

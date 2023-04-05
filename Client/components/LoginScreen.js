@@ -1,7 +1,5 @@
-// LoginScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import Header from './Header';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');

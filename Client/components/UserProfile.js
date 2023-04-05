@@ -1,7 +1,5 @@
-// UserProfile.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-//import Header from './Header';
 
 const UserProfile = () => {
   // 기본값을 현재 로그인된 사용자의 정보로 설정해야 합니다.
