@@ -12,6 +12,7 @@ const sign_up = require('./routes/api/member/sign_up');
 const sign_in = require('./routes/api/member/sign_in');
 const search_pw = require('./routes/api/member/search_pw');
 const edit_member = require('./routes/api/member/edit_member');
+const make_number = require('./routes/api/member/make_number');
 const db = require('./database/db_connect');
 
 // view engine setup
@@ -177,13 +178,26 @@ app.post('/API/Get_number', (req, res) => {
 
 })
 
-const send_message = require('../myapp/routes/api/member/test');
+app.post('/API/Verify_number', (req, res) =>{
+  console.log("[Call Verify number API]");
+  const number = req.body.phone_number;
+  console.log(number)
+  const check = make_number.make(number);
+  console.log(check)
+  if(check){
+    var con = db.conn();
+    con.query('insert into call_member values(?, ?);',[number, check], function(error, results, fields){
+      if(error) throw error
+      res.json({status: res.statusCode, number: true});
+    })
+  }else{
+    res.json({status: res.statusCode, number: null});
+  }
+})
+
 // session 도입하여 논의
-app.post('/sms/:phone', (req, res) => {
-  const paramObj = req.body.phone;
-  send_message(paramObj);
-  res.send("complete!");
-});
+
+
 
 
 // catch 404 and forward to error handler
