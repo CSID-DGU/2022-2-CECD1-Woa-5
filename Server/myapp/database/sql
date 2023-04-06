@@ -25,3 +25,6 @@ select * from member;
 
 -- 사용자 - 관리자, 관리자 - 사용자 전화번호 추가 -- 
 alter table member add opponent_number varchar(15) not null default '-'; 
+
+-- 회원 가입용 인증번호 저장 디비
+alter table member add verification_number varchar(15) not null default '-';
