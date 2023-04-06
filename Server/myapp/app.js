@@ -46,6 +46,7 @@ app.post('/API/Sign_up', (req, res) => {
   const userPhone_number = req.body.phone_number;
   const userName = req.body.name;
   const manage_number = req.body.opponent_number;
+  const Verify_number = req.body.Verify_number;
 
   var con = db.conn();
   con.query('SELECT * FROM member where email = ?', [userEmail], function(error, results, fields){
@@ -53,19 +54,30 @@ app.post('/API/Sign_up', (req, res) => {
     if(results.length > 0){
       res.json({status: res.statusCode, check : null}); // 이미 존재한다.
     }
-    const check = sign_up.verification(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName, manage_number); 
-    console.log(check);
-    if(check == 0){
-      con.query('insert into member values(?, ?, ?, ?, ?, ?);',[userEmail, userPw, userPhone_number, userName, manage_number, null], function(error, results, fields){
-        if(error) throw error;
-        console.log('회원 가입 완료');
-        res.json({status: res.statusCode, check : true});
-      })
-    }else{
-      res.json({status: res.statusCode, check : check});
-    }
+    con.query('SELECT * FROM call_member where phone_number = ?',[userPhone_number], function(error, results, fields){
+      if(error) throw error
+      if(results.length > 0){
+        console.log(results[0].verification);
+        if(Verify_number != results[0].verification){
+          res.json({status: res.statusCode, check : "인증번호 틀림"}); // 인증 번호와 맞지가 않는다. 
+        }else{
+          const check = sign_up.verification(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName, manage_number); 
+          console.log(check);
+          if(check == 0){
+            con.query('insert into member values(?, ?, ?, ?, ?, ?);',[userEmail, userPw, userPhone_number, userName, manage_number, Verify_number], function(error, results, fields){
+              if(error) throw error;
+              console.log('회원 가입 완료');
+              res.json({status: res.statusCode, check : true});
+          })
+        }else{
+          res.json({status: res.statusCode, check : check});
+        }
+        }
+      }else{
+        res.json({status: res.statusCode, check : "이것간?"}); // 존재하지 않는 연락처이므로 인증 실패
+      }
+    })
   })
-    
 })
 
 // Log in | Sign in(input: email, pw) 
