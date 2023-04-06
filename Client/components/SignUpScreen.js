@@ -57,6 +57,22 @@ function SignUpScreen() {
         if(data.check === true){
           console.log('회원가입 성공');
           alert('성공', '회원가입이 완료되었습니다');
+        }else if(data.check === 1){
+          alert('확인용 이메일이 동일하지 않습니다.');
+        }else if(data.check === 2){
+          alert('이메일 형식에 맞지 않습니다.');
+        }else if(data.check === 3){
+          alert('확인용 비밀번호와 다릅니다.');
+        }else if(data.check === 4){
+          alert('8자리 ~ 20자리 이내로 입력해주세요.');
+        }else if(data.check === 5){
+          alert('비밀번호는 공백 없이 입력해주세요.');
+        }else if(data.check === 6){
+          alert('영문,숫자, 특수문자를 혼합하여 입력해주세요.');
+        }else if(data.check === 7){
+          alert('사용자 전화번호 다시 입력하세요.');
+        }else if(data.check === 8){
+          alert('관리자 전화번호 다시 입력하세요.');
         }else{
           console.log(data);
           alert('회원가입에 실패하였습니다.');
