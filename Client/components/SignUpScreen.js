@@ -82,9 +82,29 @@ function SignUpScreen() {
     }
   };
 
-  const handleSendAuthCode = () =>{
-    Alert.alert('인증번호를 보냅니다.');
-  }
+  const handleSendAuthCode = async() =>{
+    alert('인증번호를 보냅니다.');
+    try{
+      const response = await fetch(`${SERVER_URL}/API/Verify_number`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phone_number,
+        })
+      });
+      const authCodeData = await response.json();
+      console.log(authCodeData);
+      if(authCodeData.number === true){
+        alert('인증번호를 확인해주세요.');
+      }else{
+        alert('인증번호 발송에 실패했습니다. 전화번호를 다시 확인해주세요.');
+      }
+    }catch(error){
+      alert('인증번호 전송 과정에서 문제가 발생했습니다.');
+    }
+  };
 
   return (
     <View style={styles.container}>
