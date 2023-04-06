@@ -44,6 +44,7 @@ app.post('/API/Sign_up', (req, res) => {
   const userPwCheck = req.body.pwCheck;
   const userPhone_number = req.body.phone_number;
   const userName = req.body.name;
+  const manage_number = req.body.opponent_number;
 
   var con = db.conn();
   con.query('SELECT * FROM member where email = ?', [userEmail], function(error, results, fields){
@@ -51,14 +52,16 @@ app.post('/API/Sign_up', (req, res) => {
     if(results.length > 0){
       res.json({status: res.statusCode, check : null}); // 이미 존재한다.
     }
-    if(sign_up.verification(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName)){
-      con.query('insert into member values(?, ?, ?, ?);',[userEmail, userPw, userPhone_number, userName], function(error, results, fields){
+    const check = sign_up.verification(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName, manage_number); 
+    console.log(check);
+    if(check == 0){
+      con.query('insert into member values(?, ?, ?, ?, ?, ?);',[userEmail, userPw, userPhone_number, userName, manage_number, null], function(error, results, fields){
         if(error) throw error;
         console.log('회원 가입 완료');
         res.json({status: res.statusCode, check : true});
       })
     }else{
-      res.json({status: res.statusCode, check : null});
+      res.json({status: res.statusCode, check : check});
     }
   })
     
