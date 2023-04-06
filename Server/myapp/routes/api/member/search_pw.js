@@ -66,12 +66,13 @@ exports.search = function search_pw(userEmail, phone_number) {
       },
     },
       function (err, res, html) {
-        if (err) console.log(err);
+        if (err) {
+          console.log(err);
+          return false;
+        }
         else { resultCode = 200; console.log(html); }
       }
     );
-
-
     
     
     con.query('update member set pw =? where email = ?;',[text, userEmail], function(error, results, fields){
