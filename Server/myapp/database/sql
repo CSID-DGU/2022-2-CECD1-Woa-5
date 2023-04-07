@@ -21,3 +21,20 @@ INSERT INTO member VALUES('kimms5617@naver.com', 'qweasd123!', '01012345678', '�
 INSERT INTO member VALUES('kimms1234@naver.com', 'qweasd456!', '01012345678', '김민지');
 
 select * from member;
+
+
+-- 사용자 - 관리자, 관리자 - 사용자 전화번호 추가 -- 
+alter table member add opponent_number varchar(15) not null default '-'; 
+
+-- 회원 가입용 인증번호 저장 디비 null 가능
+alter table member add verification_number varchar(15) default '-';
+
+-- 전화 인증 테이블 생성
+
+CREATE TABLE call_member
+(
+     phone_number varchar(15) PRIMARY key not null,
+     verification varchar(15) not null
+) ENGINE=INNODB;
+
+DESCRIBE call_member;
