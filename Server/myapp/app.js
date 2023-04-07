@@ -60,7 +60,7 @@ app.post('/API/Sign_up', (req, res) => {
       if(results.length > 0){
         console.log(results[0].verification);
         if(Verify_number != results[0].verification){
-          res.json({status: res.statusCode, check : "인증번호 틀림"}); // 인증 번호와 맞지가 않는다. 
+          res.json({status: res.statusCode, check : null}); // 인증 번호와 맞지가 않는다. 
         }else{
           const check = sign_up.verification(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName, manage_number); 
           console.log(check);
@@ -75,7 +75,7 @@ app.post('/API/Sign_up', (req, res) => {
         }
         }
       }else{
-        res.json({status: res.statusCode, check : "이것간?"}); // 존재하지 않는 연락처이므로 인증 실패
+        res.json({status: res.statusCode, check : 7}); // 존재하지 않는 연락처이므로 인증 실패
       }
     })
   })
