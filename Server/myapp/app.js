@@ -29,6 +29,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 const cors = require('cors');
+const { error } = require('console');
 app.use(cors({
   origin: "http://localhost:19006",
   credentials: true,
@@ -198,10 +199,21 @@ app.post('/API/Verify_number', (req, res) =>{
   console.log(check)
   if(check){
     var con = db.conn();
-    con.query('insert into call_member values(?, ?);',[number, check], function(error, results, fields){
+    con.query('select verification from call_member where phone_number = ?;', [number], function(error, results, fields){
       if(error) throw error
-      res.json({status: res.statusCode, number: true});
+      if(results.length > 0){ // 해당하는 값 존재여부
+        con.query('update call_member set verification = ? where phone_number = ?;',[check, number], function(error, results, fields){
+          if(error) throw error
+          res.json({status: res.statusCode, number: true});
+        })
+      }else{
+        con.query('insert into call_member values(?, ?);',[number, check], function(error, results, fields){
+          if(error) throw error
+          res.json({status: res.statusCode, number: true});
+        })
+      }
     })
+    
   }else{
     res.json({status: res.statusCode, number: null});
   }
