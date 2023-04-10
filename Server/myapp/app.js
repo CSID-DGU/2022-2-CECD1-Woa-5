@@ -13,6 +13,7 @@ const sign_in = require('./routes/api/member/sign_in');
 const search_pw = require('./routes/api/member/search_pw');
 const edit_member = require('./routes/api/member/edit_member');
 const make_number = require('./routes/api/member/make_number');
+const make_password = require('./routes/api/member/text');
 const db = require('./database/db_connect');
 
 // view engine setup
@@ -60,14 +61,18 @@ app.post('/API/Sign_up', (req, res) => {
       if(results.length > 0){
         console.log(results[0].verification);
         if(Verify_number != results[0].verification){
-          res.json({status: res.statusCode, check : "인증번호 틀림"}); // 인증 번호와 맞지가 않는다. 
+          res.json({status: res.statusCode, check : null}); // 인증 번호와 맞지가 않는다. 
         }else{
           const check = sign_up.verification(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName, manage_number); 
+          SecurityPw = make_password.mp(userPw); // 보안 적용
           console.log(check);
           if(check == 0){
-            con.query('insert into member values(?, ?, ?, ?, ?, ?);',[userEmail, userPw, userPhone_number, userName, manage_number, Verify_number], function(error, results, fields){
+            con.query('insert into member values(?, ?, ?, ?, ?, ?);',[userEmail, SecurityPw, userPhone_number, userName, manage_number, Verify_number], function(error, results, fields){
               if(error) throw error;
               console.log('회원 가입 완료');
+              con.query('DELETE FROM call_member where phone_number = ?',[userPhone_number], function(error, results, fields){ // 동일한 인증번호 재생성하는 계정이 없어진다.
+                if(error) throw error;
+              })
               res.json({status: res.statusCode, check : true});
           })
         }else{
@@ -75,7 +80,7 @@ app.post('/API/Sign_up', (req, res) => {
         }
         }
       }else{
-        res.json({status: res.statusCode, check : "이것간?"}); // 존재하지 않는 연락처이므로 인증 실패
+        res.json({status: res.statusCode, check : 7}); // 존재하지 않는 연락처이므로 인증 실패
       }
     })
   })
@@ -87,10 +92,11 @@ app.post('/API/Sign_in', (req, res) => {
   console.log("[Call Sign in API]");
 
   const userEmail = req.body.email;
-  const userPw = req.body.pw;
+  const userPw = make_password.mp(req.body.pw);
   // tmp = sign_in.verification(userEmail, userPw);
 
   var con = db.conn();
+  console.log(userPw);
   
   con.query('select * from member where email = ? and pw =?;',[userEmail, userPw], function(error, results, fields){
     if(error) throw error;
@@ -124,7 +130,8 @@ app.post('/API/Search_pw', (req, res) => {
     if(error) throw error;
     if(results.length > 0){
       // console.log(results.length);
-      // console.log(results[0].phone_number);
+      // console.log(results[0].phone_number);\
+      console.log(results[0].pw);
       res.json({status: res.statusCode, pw: search_pw.search(userEmail, results[0].phone_number)});
     }else{
       res.json({status: res.statusCode, pw: null }); // 없음
@@ -154,7 +161,7 @@ app.post('/API/Edit_member', (req, res) => {
     console.log(old_pw);
     if(old_pw == results[0].pw){
       if(edit_member.edit(userEmail, old_pw, new_pw, new_pw_check, phone_number, name)){
-        con.query('UPDATE member SET pw = ?, phone_number =?, name=? where email = ?',[new_pw, phone_number, name, userEmail], function(error, results, fields){
+        con.query('UPDATE member SET pw = ?, phone_number =?, name=? where email = ?',[make_password.mp(new_pw), phone_number, name, userEmail], function(error, results, fields){
           if(error) throw error;
           console.log('수정완료')
           res.json({status: res.statusCode, check: true});
