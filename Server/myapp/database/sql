@@ -39,5 +39,5 @@ CREATE TABLE call_member
 
 DESCRIBE call_member;
 
--- 비밀번호 암호호로 인한 크기 연장
-alter table member modify phone_number varchar(64);
+-- 비밀번호 암호화로 인한 크기 연장
+alter table member modify pw varchar(64);
