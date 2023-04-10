@@ -68,6 +68,9 @@ app.post('/API/Sign_up', (req, res) => {
             con.query('insert into member values(?, ?, ?, ?, ?, ?);',[userEmail, userPw, userPhone_number, userName, manage_number, Verify_number], function(error, results, fields){
               if(error) throw error;
               console.log('회원 가입 완료');
+              con.query('DELETE FROM call_member where phone_number = ?',[userPhone_number], function(error, results, fields){ // 동일한 인증번호 재생성하는 계정이 없어진다.
+                if(error) throw error;
+              })
               res.json({status: res.statusCode, check : true});
           })
         }else{
