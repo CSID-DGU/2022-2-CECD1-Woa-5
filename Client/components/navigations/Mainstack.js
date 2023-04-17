@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 const MainStack = (props) => {
     return (
         <Stack.Navigator>
-            <Stack.Screen name='heading' component={Heading} options={{ title: 'wow' }} />
+            {/* <Stack.Screen name='heading' component={Heading} options={{ title: 'wow' }} /> */}
             <Stack.Screen name='menuScreen' component={Menu} options={{ title: '메인' }} />
             <Stack.Screen name='lineScreen' component={HorizonLine}/>
             <Stack.Screen name='callScreen' component={Call} />

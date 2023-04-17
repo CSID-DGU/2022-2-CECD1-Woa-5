@@ -91,7 +91,7 @@ const Call = () => {
                         borderRadius: 50,
                         overflow: 'hidden',
                     }}
-                    source={require('/Users/kimdanha/Documents/reactnative/WoaProject/woa/assets/phone_icon.png')}
+                    source={require('../assets/phone_icon.png')}
                 />
                 <Text>전화 버튼</Text>
             </TouchableOpacity>
