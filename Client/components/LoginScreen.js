@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({navigation, setIsLoggedIn}) => {
   const [email, setEmail] = useState('');
   const [pw, setPassword] = useState('');
   const SERVER_URL = 'http://ec2-43-200-5-132.ap-northeast-2.compute.amazonaws.com:3000';
@@ -25,6 +25,8 @@ const LoginScreen = ({navigation}) => {
         //로그인 성공
         console.log('로그인 성공');
         //로그인 후 이동할 페이지로 이동하기
+        setIsLoggedIn(true);
+        navigation.navigate('Mainstack', { screen: 'heading' });
       }else{
         //로그인 실패
         console.log('로그인 실패');
