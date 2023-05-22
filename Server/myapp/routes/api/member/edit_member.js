@@ -14,7 +14,7 @@ exports.edit = function edit_member(userEmail, old_pw, new_pw, new_pw_check, pho
     
         if(new_pw != new_pw_check){
             console.log("확인용 비밀번호와 다릅니다.");
-            return false;
+            return 3;
         }
     
         var num = new_pw.search(/[0-9]/g);
@@ -24,13 +24,13 @@ exports.edit = function edit_member(userEmail, old_pw, new_pw, new_pw_check, pho
         if(new_pw.length < 8 || new_pw.length > 20){
        
          console.log("8자리 ~ 20자리 이내로 입력해주세요.");
-         return false;
+         return 4;
         }else if(new_pw.search(/\s/) != -1){
          console.log("비밀번호는 공백 없이 입력해주세요.");
-         return false;
+         return 5;
         }else if(num < 0 || eng < 0 || spe < 0 ){
          console.log("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
-         return false;
+         return 6;
         }else {
            console.log("통과"); 
         //    return true;
@@ -38,7 +38,7 @@ exports.edit = function edit_member(userEmail, old_pw, new_pw, new_pw_check, pho
     
         if(phone_number.toString().length != 11){
             console.log("전화번호 다시 입력하세요.");
-            
+            return 7;
         }
         console.log(Number(phone_number)); // 만약 숫자로 필요하다면 이렇게 변환하여 쓸 수 있다는 점. 주의) 01012345678 => 1012345678 로 출력됨 
     

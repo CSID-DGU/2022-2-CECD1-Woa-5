@@ -9,6 +9,7 @@ const db = require("../../../database/db_connect");
 const config = require('./number.json');
 const request = require('request')
 const CryptoJS = require('crypto-js');
+const make_password = require('./text');
 exports.search = function search_pw(userEmail, phone_number) {
         
     // TODO 요청된 이메일이 데이터베이스 상에 있는지 확인해야한다.
@@ -66,15 +67,16 @@ exports.search = function search_pw(userEmail, phone_number) {
       },
     },
       function (err, res, html) {
-        if (err) console.log(err);
+        if (err) {
+          console.log(err);
+          return false;
+        }
         else { resultCode = 200; console.log(html); }
       }
     );
-
-
     
     
-    con.query('update member set pw =? where email = ?;',[text, userEmail], function(error, results, fields){
+    con.query('update member set pw =? where email = ?;',[make_password.mp(text), userEmail], function(error, results, fields){
         if(error) throw error;
         console.log('수정 완료');
     })

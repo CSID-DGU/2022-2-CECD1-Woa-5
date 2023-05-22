@@ -1,34 +1,45 @@
-import 'react-native-get-random-values';
-import React from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet } from 'react-native';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import AuthStack from './components/navigations/AuthStack';
+import MainStack from './components/navigations/Mainstack';
 
-// import MainPage from './MainPage';
-// import PhonePage from './PhonePage';
-// import CalendarPage from './CalendarPage';
-import SignUpScreen from './components/SignupScreen';
-import LoginScreen from './components/LoginScreen';
-import UserProfile from './components/UserProfile';
-import FindPWScreen from './components/FindPWScreen';
 
-const Stack = createStackNavigator();
+export default function App() {
+  // console.log("Woa React Native"); //개발 중 로그 확인용
+  const [ isLoggedIn, setIsLoggedIn ] = useState(false); //true면 메인 기능 다 사용, false면 로그인창 
 
-const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main">
-        {/* <Stack.Screen name="Main" component={MainPage} options={{ headerShown: false }} /> */}
-        <Stack.Screen name="Signup" component={SignUpScreen} options={{ title: '회원가입' }} />
+    <NavigationContainer style={styles.container}>
+      <StatusBar style="auto" />
+      {isLoggedIn ? <MainStack/> : <AuthStack setIsLoggedIn={setIsLoggedIn}/>} 
+    </NavigationContainer>
+  );
+}
 
-        <Stack.Screen name="UserProfile" component={UserProfile} options={{ title: '회원정보 수정' }} />
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  TotalContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+  }
+  ,
+  menuContainer: {
+    marginTop: 100,
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
 
-        <Stack.Screen name="Login" component={LoginScreen} options={{ title: '로그인' }} />
-        <Stack.Screen name="FindPW" component={FindPWScreen} options={{ title: '비밀번호 찾기' }} />
-        {/* <Stack.Screen name="Phone" component={PhonePage} options={{ title: '전화' }} /> */}
-        {/* <Stack.Screen name="Calendar" component={CalendarPage} options={{ title: '캘린더' }} /> */}
-  </Stack.Navigator>
-</NavigationContainer>
-);
-};
+  },
+  bodyScreenContainer: {
+    flex: 6,
+    backgroundColor: 'white',
+  }
 
-export default App;
+});

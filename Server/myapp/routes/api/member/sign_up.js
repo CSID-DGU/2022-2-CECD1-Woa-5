@@ -17,19 +17,19 @@
 
 //   sign_up(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName);
 
-exports.verification = function sign_up(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName) {
+exports.verification = function sign_up(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName, manage_number) {
     
 // function sign_up(userEmail, userEmailCheck, userPw, userPwCheck, userPhone_number, userName) {
     if(userEmail != userEmailCheck){
         console.log("확인용 이메일이 동일하지 않습니다.");
-        return false;
+        return 1;
     }
     var reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
 
     if(!reg_email.test(userEmail)) {   
         console.log("이메일 형식에 맞지 않습니다.");     
         console.log(userEmail);              
-        return error;         
+        return 2;         
 
     }else{
         console.log("이메일 형식에 맞습니다.");
@@ -40,7 +40,7 @@ exports.verification = function sign_up(userEmail, userEmailCheck, userPw, userP
     
     if(userPw != userPwCheck){
         console.log("확인용 비밀번호와 다릅니다.");
-        return false;
+        return 3;
     }
 
     var num = userPw.search(/[0-9]/g);
@@ -50,25 +50,31 @@ exports.verification = function sign_up(userEmail, userEmailCheck, userPw, userP
     if(userPw.length < 8 || userPw.length > 20){
    
      console.log("8자리 ~ 20자리 이내로 입력해주세요.");
-     return false;
+     return 4;
     }else if(userPw.search(/\s/) != -1){
      console.log("비밀번호는 공백 없이 입력해주세요.");
-     return false;
+     return 5;
     }else if(num < 0 || eng < 0 || spe < 0 ){
      console.log("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
-     return false;
+     return 6;
     }else {
        console.log("통과"); 
     //    return true;
     }
 
     if(userPhone_number.toString().length != 11){
-        console.log("전화번호 다시 입력하세요.");
-        
+        console.log("사용자 전화번호 다시 입력하세요.");
+        return 7;
     }
     console.log(Number(userPhone_number)); // 만약 숫자로 필요하다면 이렇게 변환하여 쓸 수 있다는 점. 주의) 01012345678 => 1012345678 로 출력됨 
 
-    return true;
+    if(manage_number.toString().length != 11){
+        console.log("관리자 전화번호 다시 입력하세요.");
+        return 8;
+    }
+
+    return 0;
+    
     res.json({status: res.statusCode});
     res.send();
 
