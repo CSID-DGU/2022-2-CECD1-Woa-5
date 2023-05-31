@@ -3,12 +3,7 @@ from collections import OrderedDict
 import speech_recognition as sr
 from gtts import gTTS
 from playsound import playsound
-import shutil
 import google.cloud.dialogflow_v2 as dialogflow
-# from IPython.display import Audio
-# from IPython.display import display
-# import IPython.display as ipd
-# import numpy
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] ='chatbot-pyos-3384ec921f92.json'
 DIALOGFLOW_PROJECT_ID ='chatbot-pyos'
@@ -21,17 +16,8 @@ session = session_client.session_path(DIALOGFLOW_PROJECT_ID,SESSION_ID)
 CACHE_CAPACITY = 5
 cache = OrderedDict()
 cache_path = "audio_cache"
-#all_audios_path = "All_audios"#dialogflow에 연동할 예정
-
-# def SoundNotification():
-#     sr = 22050 # sample rate
-#     T = 0.5    # seconds
-#     t = numpy.linspace(0, T, int(T*sr), endpoint=False) # time variable
-#     x = 0.5*numpy.sin(2*numpy.pi*440*t)              # pure sine wave at 440 Hz
-#     ipd.Audio(x, rate=sr, autoplay=True)
 
 def play_audio_from_cache(file_name):
-    # Audio(os.path.join(cache_path, file_name), autoplay=True)
     playsound(os.path.join(cache_path, file_name))
 
 def update_cache(file_name):#캐시 폴더 업데이트
@@ -42,9 +28,6 @@ def update_cache(file_name):#캐시 폴더 업데이트
             lru_file = cache.popitem()[1]
             print(f"lru_file: {lru_file}")
             os.remove(os.path.join(cache_path, lru_file))#캐시 폴더에서 오래된 파일 삭제
-        # cache[file_name] = file_name
-        # cache.move_to_end(file_name, last=False)
-        # shutil.copy(os.path.join(all_audios_path, file_name), os.path.join(cache_path, file_name))
         print('캐시 업데이트 완료')
 
 #audio_cache와 cache동기화
@@ -94,7 +77,6 @@ def speak(text, file_name):
     #캐시 업데이트 후 플레이
     update_cache(file)
     tts.save(f'audio_cache/{file}')
-    # ipd.Audio(filename=f'audio_cache/{file}', autoplay=True)
     playsound(file)
 
 
@@ -107,11 +89,6 @@ synchronize_cache_with_folder()
 
 speak('동국 군청입니다. 식사하셨습니까?', 'hello')
 stop_listening = r.listen_in_background(m, listen)
-# answer("안녕")
-# answer("고마워")
-# answer("물 줄까?")
-# answer("종료")
-# stop_listening(wait_for_stop = False) # 더 이상 듣지 않음 
 
 #while True:
     #time.sleep(0.1) 
