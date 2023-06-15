@@ -6,13 +6,13 @@ import Heading from '../Heading';
 import HorizonLine from '../HorizonLine';
 import LoginButton from '../LoginButton';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
 const MainStack = (props) => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator style={styles.stackContainer}>
             {/* <Stack.Screen name='heading' component={Heading} options={{ title: 'wow' }} /> */}
             <Stack.Screen name='menuScreen' component={Menu} options={{ title: '메인' }} />
             <Stack.Screen name='lineScreen' component={HorizonLine}/>
@@ -26,9 +26,11 @@ const MainStack = (props) => {
 
 };
 
+const styles = StyleSheet.create({
+    stackContainer : {
+        color: 'white',
+    },
+});
+
+
 export default MainStack;
-/*
-
-
-
- */
