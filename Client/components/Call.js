@@ -43,10 +43,10 @@ const Call = () => {
     ///////////////////////////////
 
     const phoneNumbers = [  // 전화번호 리스트 데이터
-        { id: 1, name: 'Kim', phone: '010-1234-1237' },
-        { id: 2, name: 'Lee', phone: '010-9999-5432' },
-        { id: 3, name: 'Park', phone: '010-6666-5432' },
-        { id: 4, name: 'Jung', phone: '010-4444-5432' },
+        { id: 1, name: '김김김', phone: '010-9342-1843' },
+        { id: 2, name: '이이이', phone: '010-9572-1934' },
+        { id: 3, name: '박박박', phone: '010-6139-5432' },
+        { id: 4, name: '심심심', phone: '010-4282-1739' },
     ];
 
 
@@ -119,9 +119,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-between',
         flexDirection: 'row',
-        padding: 20
+        padding: 20,
+        backgroundColor: 'white',
+        marginTop: '0px',
     },
     bodyText: {
         textAlign: 'center',
@@ -132,10 +133,12 @@ const styles = StyleSheet.create({
     },
     flatlistStyle: {
         paddingRight: 20,
+        paddingVertical: 10,
     },
     listStyle: {
         paddingVertical: 10,
         paddingHorizontal: 15,
+        marginVertical: 10,
         borderWidth: 1,
         borderRadius: 5,
         borderColor: 'gray'
