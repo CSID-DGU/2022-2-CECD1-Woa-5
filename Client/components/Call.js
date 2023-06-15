@@ -5,42 +5,8 @@ import { Platform, FlatList } from 'react-native';
 import { View, Text, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Image } from 'react-native';
-//전화 아이콘 파일 라이센스 : 사용시(예를 들어 웹문서 작성 등) 반드시 출처를 표시해야 한다.
 
-//////////////////////////////////////////////////////////////////////////////////
 const Call = () => {
-    // const [contactData, setContactData] = useState([]); //서버에서 전화번호 가져올 부분
-
-    // const getContactData = async () => {
-
-    //     try {
-    //         const response = await fetch('http://ec2-43-200-5-132.ap-northeast-2.compute.amazonaws.com:3000/', {
-    //             method: 'POST',
-    //             headers: {
-    //                 Accept: 'application/json',
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 id,
-    //                 name,
-    //                 phone,
-    //             }),
-    //         });
-    //         setContactData(response);
-
-
-    //     }
-    //     catch (error) {
-    //         console.error(error);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     getContactData();
-    // }, []);
-
-
-    ///////////////////////////////
 
     const phoneNumbers = [  // 전화번호 리스트 데이터
         { id: 1, name: '김김김', phone: '010-9342-1843' },
@@ -96,14 +62,6 @@ const Call = () => {
                 <Text>전화 버튼</Text>
             </TouchableOpacity>
 
-
-            {/* <View>
-                {phoneNumbers.map((item) => (
-                    <TouchableOpacity key={item.phone} onPress={() => callNumber(item.phone)}>
-                    </TouchableOpacity>
-                ))}
-            </View> */}
-
             <FlatList style={styles.flatlistStyle} data={phoneNumbers} renderItem={renderItem}>
             </FlatList>
 
@@ -146,62 +104,3 @@ const styles = StyleSheet.create({
 })
 
 export default Call
-
-//   <FlatList style={styles.flatlistStyle} data={phoneNumbers} renderItem={renderItem}></FlatList>
-
-
-/*
-const getContactData = async () => {
-    //Fetch data: contact list generating. 서버로부터 데이터 받아오는
-       try {
-         const response = await fetch('서버 URL');
-         const requestOptions = {
-           method: 'GET',
-           redirect: 'follow'
-         };
-   
-         const data = await response.json();
-         const ContactList = []; // ContactList 배열에 infoList객체들 넣기 (data의 정보값들 넣어진)
-         for (const key in data) {
-           ContactList.push(
-             new infoList(
-               data[key].id,
-               data[key].name,
-               data[key].phone
-             )
-           );
-         }
-       } 
-       
-    catch (error) {
-         console.error(error);
-       }
-     }
-     */
-
-
-/*
-
-<FlatList
-           data={contactData}
-           keyExtractor={({ id }) => id}
-           renderItem={({ item }) => (
-               <Text>
-                   this is {item.name},
-               </Text>
-           )}
-       />
-*/
-
-
-
-{/* <View style={styles.container}>
-                {phoneNumbers.map((item) => (
-                    <TouchableOpacity key={item.phone} onPress={() => callNumber(item.phone)}>
-                        <View>
-                            <Text>성명 : {item.name}</Text>
-                            <Text>번호 : {item.phone}</Text>
-                        </View>
-                    </TouchableOpacity>
-                ))}
-            </View> */}

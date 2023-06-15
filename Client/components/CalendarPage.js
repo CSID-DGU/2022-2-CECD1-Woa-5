@@ -2,7 +2,6 @@ import { Platform } from 'react-native'; //추후 플랫폼 통일시 필요
 import { View, Text, StyleSheet } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Calendar, CalendarList } from "react-native-calendars";
-//import 'react-calendar/dist/Calendar.css'; 현재 오류떠서 삭제함.
 
 import plant from '../assets/plant.PNG';
 import watering from '../assets/watering.PNG';
@@ -10,21 +9,6 @@ import watering from '../assets/watering.PNG';
 const CalendarPage = () => {
   const [selected, setSelected] = useState('');
 
- 
-
-  function extractDatesFromData(data) {
-    const dates = data.map(item => item.date);
-    return dates;
-  }
-
-
-
-
-
-  useEffect(() => {
-    console.log('when it start first');
-  }) // 없어도 됨
-  /////////////////////////////////////////////////////////////
   const markedDates = {
     '2023-05-15': { selected: true, color: 'skyblue' },
     '2023-05-22': { selected: true, color: 'skyblue' },
@@ -33,22 +17,7 @@ const CalendarPage = () => {
     '2023-06-05': { selected: true, color: 'skyblue' },
     '2023-06-09': { selected: true, color: 'skyblue' },
     '2023-06-13': { selected: true, color: 'skyblue' },
-    //'2023-03-10': { marked: true, color : 'skyblue' },
-    //'2023-03-26': { selected: true , selectedColor: 'red'},
   }
-  //markedDates={markedDates}
-  /*
-   onDayPress={day => {
-            console.log('selected day', day);
-          }}
-            markedDates={markedDates}
-  */
-  /*
-  markedDates={{
-   [selected]: { selected: true, disableTouchEvent: true, selectedDotColor: 'blue' }
- }}
- theme = {styles.bodyStyle}
-  */
   return (
     <View style={styles.calendarContainer}>
       <div sylte={styles.titleContainer}>

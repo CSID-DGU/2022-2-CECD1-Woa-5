@@ -63,30 +63,3 @@ const styles = StyleSheet.create({
 })
 
 export default Menu
-
-
-
-// const Menu = ({navigation}) => (
-//     <View style={styles.headerContainer}>
-//         <Button title = "전화" onPress={()=> navigation.push('callScreen')}
-//             color = 'gray'>
-//             <Text style={styles.CallText}>
-//                 전화
-//             </Text>
-//         </Button>
-//         <Text>    |   </Text>
-//         <Button  title = "캘린더" onPress={()=> console.log('calendar!')}
-//             color = 'gray'>
-//             <Text style={styles.CallText}>
-//                 캘린더
-//             </Text>
-//         </Button>
-//         <View //This is horizontal line between Menu and bodyScreen
-//           style={{
-//             width: '100%',
-//             borderBottomColor: 'black',
-//             borderBottomWidth: StyleSheet.hairlineWidth,
-//           }}
-//         />
-//     </View>
-// )
