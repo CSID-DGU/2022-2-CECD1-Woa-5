@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, CalendarList } from "react-native-calendars";
 //import 'react-calendar/dist/Calendar.css'; 현재 오류떠서 삭제함.
 
+import plant from '../assets/plant.PNG';
+import watering from '../assets/watering.PNG';
+
 const CalendarPage = () => {
   const [selected, setSelected] = useState('');
 
@@ -23,11 +26,13 @@ const CalendarPage = () => {
   }) // 없어도 됨
   /////////////////////////////////////////////////////////////
   const markedDates = {
-    '2023-03-13': { selected: true, color: 'skyblue' },
-    '2023-03-12': { selected: true, color: 'skyblue' },
-    '2023-03-21': { selected: true, color: 'skyblue' },
-    '2023-04-21': { selected: true, color: 'skyblue' },
-    '2023-02-10': { selected: true, color: 'skyblue' },
+    '2023-05-15': { selected: true, color: 'skyblue' },
+    '2023-05-22': { selected: true, color: 'skyblue' },
+    '2023-05-27': { selected: true, color: 'skyblue' },
+    '2023-06-01': { selected: true, color: 'skyblue' },
+    '2023-06-05': { selected: true, color: 'skyblue' },
+    '2023-06-09': { selected: true, color: 'skyblue' },
+    '2023-06-13': { selected: true, color: 'skyblue' },
     //'2023-03-10': { marked: true, color : 'skyblue' },
     //'2023-03-26': { selected: true , selectedColor: 'red'},
   }
@@ -45,8 +50,13 @@ const CalendarPage = () => {
  theme = {styles.bodyStyle}
   */
   return (
-    <View>
-      <Text style={styles.headerText}>식물에 물은 잘 주고 계신가요?</Text>
+    <View style={styles.calendarContainer}>
+      <div sylte={styles.titleContainer}>
+        <img src={plant} style={styles.image} alt="plant" />
+        <Text style={styles.headerText}>식물에 물은 잘 주고 계신가요?</Text>
+        <img src={watering} style={styles.image} alt="watering" />
+      </div>
+      
       <Calendar style={styles.calendar}
         onDayPress={day => {
           setSelected(day.dateString);
@@ -87,11 +97,25 @@ const CalendarPage = () => {
 
 
 const styles = StyleSheet.create({
+  calendarContainer:{
+    backgroundColor: 'white',
+    height: '100%',
+  },
+  titleContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  image:{
+    width: '30px',
+  },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    backgroundColor: 'white',
   },
 
   bodyStyle: {
@@ -113,7 +137,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 15,
     fontSize: 20,
-    color: 'yellowgreen'
+    color: 'black',
+    marginHorizontal: 'auto',
+    borderBottomWidth: '2px',
+    borderBottomColor: 'yellowgreen',
   },
 })
 
